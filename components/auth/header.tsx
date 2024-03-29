@@ -8,7 +8,7 @@ const Header = ({ label }: HeaderProps) => {
         <div>
             <div className="flex h-20 w-full items-end rounded-lg">
                 <div className="w-32 text-white md:w-36 ">
-                    <h1>logo</h1>
+                    {/* <h1>logo</h1> */}
                 </div>
             </div>
             <h1

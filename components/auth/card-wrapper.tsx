@@ -31,13 +31,7 @@ const CardWrapper = ({
             <CardHeader>
                 <Header label={headerLabel} />
             </CardHeader>
-            {showSocial && (
-                <CardFooter>
-                    <Social />
-                </CardFooter>
-            )}
             <CardContent>{children}</CardContent>
-
             <CardFooter>
                 <BackButton label={backButtonLabel} href={backButtonHref} />
             </CardFooter>

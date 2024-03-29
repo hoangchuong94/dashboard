@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
+    .grid-template-cols-13 {
+        display: grid;
+        grid-template-columns: repeat(13, minmax(0, 1fr));
+    }
 }
 @layer base {
     :root {

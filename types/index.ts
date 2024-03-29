@@ -1,17 +1,39 @@
-export type ErrorLogin = {
-    errors?: {
-        email?: string[];
-        password?: string[];
-    };
-    message: string | null;
+export type CardData = {
+    numberOfCustomers: number;
+    numberOfInvoices: number;
+    totalPaidInvoices: string;
+    totalPendingInvoices: string;
 };
 
-export type ErrorRegister = {
-    errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-        passwordConfirm?: string[];
-    };
-    message: string | null;
+export type Revenue = {
+    month: string;
+    revenue: number;
+};
+
+export enum Month {
+    Jan = 'Jan',
+    Feb = 'Feb',
+    Mar = 'Mar',
+    Apr = 'Apr',
+    May = 'May',
+    Jun = 'Jun',
+    Jul = 'Jul',
+    Aug = 'Aug',
+    Sep = 'Sep',
+    Oct = 'Oct',
+    Nov = 'Nov',
+    Dec = 'Dec',
+}
+
+export type Customer = {
+    name: string;
+    email: string;
+    imageUrl: string;
+};
+
+export type LatestInvoices = {
+    amount: string;
+    id: string;
+    createdAt: Date;
+    customer: Customer;
 };

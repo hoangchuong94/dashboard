@@ -10,15 +10,10 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import {
-    KeyIcon,
-    EnvelopeIcon,
-    ExclamationCircleIcon,
-    ArrowRightIcon,
-} from '@heroicons/react/24/outline';
+import { KeyIcon, UserIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../ui/input';
@@ -26,13 +21,14 @@ import { Button } from '../ui/button';
 import { LoginSchema } from '@/schema/index';
 import CardWrapper from '@/components/auth/card-wrapper';
 import FormError from './form-error';
-import { ErrorLogin } from '@/types';
 
 const LoginForm = () => {
+    const [errorMessage, setErrorMessage] = useState<string>();
+
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
-            email: '',
+            username: '',
             password: '',
         },
     });
@@ -41,26 +37,42 @@ const LoginForm = () => {
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         const formValid = LoginSchema.safeParse({
-            email: values.email,
+            email: values.username,
             password: values.password,
         });
 
-        if (formValid.success) {
-            // logic fetch data
-            console.log(JSON.stringify(values));
+        if (!formValid.success) {
+            const data = fetchData(values.username, values.password);
+            return data;
         }
+        setErrorMessage('form validation error');
     };
-    const fetchData = (email: string, password: string) => {
-        console.log({
-            email: email,
-            password: password,
-        });
+    const fetchData = async (email: string, password: string) => {
+        try {
+            const response = await fetch(
+                'http://60.75.209.140:8000/api/version/v1/login/1',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_name: email,
+                        password: password,
+                    }),
+                },
+            );
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            setErrorMessage('some thing went wrong');
+        }
     };
 
     return (
         <CardWrapper
             headerLabel="Login"
-            backButtonLabel="Do not an account"
+            backButtonLabel="Do not an account ?"
             backButtonHref="/auth/register"
             showSocial
         >
@@ -71,24 +83,25 @@ const LoginForm = () => {
                 >
                     <FormField
                         control={form.control}
-                        name="email"
+                        name="username"
                         render={({ field }) => (
                             <FormItem>
                                 <div className="my-2 border-b-[1px] border-b-black">
                                     <FormLabel className="flex flex-row-reverse items-center justify-center">
-                                        <EnvelopeIcon className="h-6 w-6 text-sm text-black hover:cursor-pointer" />
+                                        <UserIcon className="h-6 w-6 text-sm text-black hover:cursor-pointer " />
+
                                         <FormControl>
                                             <Input
                                                 {...field}
                                                 disabled={isPending}
-                                                placeholder="Enter email"
-                                                type="email"
-                                                className="border-none py-6 text-base text-zinc-600 shadow-none transition-none focus:animate-bounce focus-visible:ring-0"
+                                                placeholder="Enter username"
+                                                type="text"
+                                                className="border-none py-6 text-base text-zinc-800 shadow-none transition-none focus-visible:ring-0"
                                             />
                                         </FormControl>
                                     </FormLabel>
                                 </div>
-                                <FormMessage className="ml-3" />
+                                <FormMessage className="mx-3" />
                             </FormItem>
                         )}
                     />
@@ -105,18 +118,20 @@ const LoginForm = () => {
                                                 disabled={isPending}
                                                 placeholder="Enter you password"
                                                 type="password"
-                                                className="border-none py-6 text-base text-zinc-600 shadow-none transition-none focus:animate-bounce focus-visible:ring-0"
+                                                className="border-none py-6 text-base text-zinc-800 shadow-none transition-none focus-visible:ring-0"
                                             />
                                         </FormControl>
                                     </FormLabel>
                                 </div>
-                                <FormMessage className="ml-3" />
+                                <FormMessage className="mx-3" />
                             </FormItem>
                         )}
                     />
 
                     <LoginButton />
-                    <FormError />
+                    {errorMessage && (
+                        <FormError status="error" message={errorMessage} />
+                    )}
                 </form>
             </Form>
         </CardWrapper>
