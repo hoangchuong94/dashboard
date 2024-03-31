@@ -22,7 +22,7 @@ import { LoginSchema } from '@/schema/index';
 import CardWrapper from '@/components/auth/card-wrapper';
 import FormError from './form-error';
 
-const LoginForm = () => {
+export default function LoginForm() {
     const [errorMessage, setErrorMessage] = useState<string>();
 
     const form = useForm<z.infer<typeof LoginSchema>>({
@@ -136,7 +136,7 @@ const LoginForm = () => {
             </Form>
         </CardWrapper>
     );
-};
+}
 
 function LoginButton() {
     const pending = false;
@@ -170,5 +170,3 @@ function RegisterButton() {
         </Link>
     );
 }
-
-export default LoginForm;

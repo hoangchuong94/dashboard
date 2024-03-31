@@ -1,15 +1,16 @@
 import SideNav from '@/components/dashboard/side-nav';
+import PageTitle from '@/components/page-title';
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <main className="min-h-screen w-full bg-white text-black">
-            <div className="flex min-h-[inherit]">
-                <SideNav />
-                <div className="flex-1 px-5">{children}</div>
-            </div>
-        </main>
-    );
+  return (
+    <main className="flex md:min-h-[inherit]">
+      <SideNav />
+      <div className="flex flex-1 flex-col p-10">
+        <div>{children}</div>
+      </div>
+    </main>
+  );
 }
